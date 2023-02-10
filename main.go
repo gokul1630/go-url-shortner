@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -16,6 +17,9 @@ type Data struct {
 }
 
 func main() {
+
+	ok := godotenv.Load()
+	err(ok)
 
 	router := gin.Default()
 
