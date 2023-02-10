@@ -23,6 +23,9 @@
                 if (inputValue && typeof window !== "undefined") {
                     const response = await fetch(`${window.location.origin}/url`, {
                         method: "POST",
+                        headers: {
+                            "Content-type": "application/json",
+                        },
                         body: JSON.stringify({ url: inputValue }),
                     })
                     const data = await response.json()
