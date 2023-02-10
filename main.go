@@ -9,7 +9,6 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -22,9 +21,6 @@ type Data struct {
 }
 
 func main() {
-
-	ok := godotenv.Load()
-	err(ok)
 
 	MONGOURI := os.Getenv("MONGO_URI")
 
