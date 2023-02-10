@@ -88,14 +88,23 @@ func handleNewUrl(context *gin.Context) {
 
 	collection := client.Database("url-schema").Collection("url")
 
+	findHash := bson.D{primitive.E{Key: "url", Value: decodedUrl.Url}}
+
+	var result UrlSchema
+
+	collection.FindOne(context, findHash).Decode(&result)
+
 	data := UrlSchema{Hash: hash, Url: decodedUrl.Url}
 
-	if hash != "" {
+	if hash != "" && result.Url != data.Url {
 		_, error := collection.InsertOne(context, data)
 		err(error)
+
+		context.JSON(http.StatusOK, gin.H{"url": hash})
+	} else {
+		context.JSON(http.StatusOK, gin.H{"url": result.Hash})
 	}
 
-	context.JSON(http.StatusOK, gin.H{"url": hash})
 }
 
 func generateUrl(n int) string {
