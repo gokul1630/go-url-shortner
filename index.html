@@ -13,20 +13,32 @@
                 <input required autocomplete="off" id="urlInput" type="text" />
             </label>
             <button>short</button>
-            <p hidden id="error">please enter valid URL</p>
+            <p hidden id="error">please enter a valid URL</p>
         </form>
         <h1 id="result"></h1>
         <script>
+            function isValidUrl(string) {
+                try {
+                    new URL(string)
+                    return true
+                } catch (err) {
+                    return false
+                }
+            }
+
             const form = document.getElementById("form")
             const input = document.getElementById("urlInput")
             const result = document.getElementById("result")
+            const error = document.getElementById("error")
 
             form.addEventListener("submit", async function (event) {
                 event.preventDefault()
 
                 const inputValue = input.value
 
-                if (inputValue && typeof window !== "undefined") {
+                if (inputValue && isValidUrl(inputValue) && typeof window !== "undefined") {
+                    error.hidden = true
+
                     const response = await fetch(`${window.location.origin}/url`, {
                         method: "POST",
                         headers: {
@@ -39,6 +51,8 @@
                         input.value = ""
                         result.innerText = `${window.location.origin}/${data.url}`
                     }
+                } else {
+                    error.hidden = false
                 }
             })
         </script>
