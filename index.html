@@ -78,7 +78,7 @@
                     error.hidden = true
                     input.className += " border-0"
 
-                    const response = await fetch(`${window.location.origin}/url`, {
+                    const response = await fetch(`${window.location.origin}/api/v1/url`, {
                         method: "POST",
                         headers: {
                             "Content-type": "application/json",

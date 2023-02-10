@@ -1,4 +1,4 @@
-module url-shortner
+module github.com/gokul1630/go-url-shortner
 
 go 1.19
 
