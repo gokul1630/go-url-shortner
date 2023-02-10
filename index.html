@@ -5,17 +5,41 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Url Shortner</title>
+        <meta name="description" content="URL shortner made with Golang" />
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body>
-        <h1>URL Shortner</h1>
-        <form method="GET" id="form">
-            <label>
-                <input required autocomplete="off" id="urlInput" type="text" />
-            </label>
-            <button>short</button>
-            <p hidden id="error">please enter a valid URL</p>
-        </form>
-        <h1 id="result"></h1>
+    <body class="bg-gradient-to-tr from-blue-500 to-blue-900 h-screen flex justify-center w-full">
+        <div class="flex flex-col justify-center items-center px-4 w-full">
+            <h1 class="text-white text-5xl text-center">URL Shortner</h1>
+            <form id="form" class="flex flex-col items-center pt-10 max-w-lg w-full">
+                <label class="w-full">
+                    <input
+                        required
+                        type="text"
+                        id="urlInput"
+                        autocomplete="off"
+                        placeholder="Paste your URL here"
+                        class="py-5 px-4 rounded-lg text-xl outline-none border-red-400 w-full text-center" />
+                    <p hidden class="mt-5 text-xl text-center text-red-400" id="error">please enter a valid URL</p>
+                </label>
+                <button class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-1 mt-5 rounded-lg text-2xl leading-10">
+                    short
+                </button>
+            </form>
+            <div id="copy-paste-section" class="relative max-w-lg bg-gray-400 mt-10 px-3 py-10 rounded-lg w-full">
+                <h1 class="text-white text-3xl text-center break-words" id="result"></h1>
+                <button
+                    onclick="copyText(this)"
+                    id="copy-btn"
+                    class="absolute right-0 top-0 bg-gray-300 rounded-lg px-1 text-gray-800 hover:bg-gray-200">
+                    copy!
+                </button>
+            </div>
+            <p class="text-lg text-white leading-5 mt-10">
+                Made with Go by
+                <a href="https://github.com/gokul1630" target="_blank" class="underline">gokul</a>
+            </p>
+        </div>
         <script>
             function isValidUrl(string) {
                 try {
@@ -30,6 +54,20 @@
             const input = document.getElementById("urlInput")
             const result = document.getElementById("result")
             const error = document.getElementById("error")
+            const copySection = document.getElementById("copy-paste-section")
+
+            function copyText(event) {
+                if (result.innerText)
+                    navigator.clipboard
+                        .writeText(result.innerText)
+                        .then(() => {
+                            event.innerText = "copied!"
+                            result
+                        })
+                        .catch(() => {
+                            event.innerText = "copy!"
+                        })
+            }
 
             form.addEventListener("submit", async function (event) {
                 event.preventDefault()
@@ -38,6 +76,7 @@
 
                 if (inputValue && isValidUrl(inputValue) && typeof window !== "undefined") {
                     error.hidden = true
+                    input.className += " border-0"
 
                     const response = await fetch(`${window.location.origin}/url`, {
                         method: "POST",
@@ -53,6 +92,7 @@
                     }
                 } else {
                     error.hidden = false
+                    input.className += " border-4"
                 }
             })
         </script>
