@@ -7,9 +7,13 @@
         <title>Url Shortner</title>
     </head>
     <body>
+        <h1>URL Shortner</h1>
         <form method="GET" id="form">
-            <input id="urlInput" type="text" />
-            <button>Submit</button>
+            <label>
+                <input required autocomplete="off" id="urlInput" type="text" />
+            </label>
+            <button>short</button>
+            <p hidden id="error">please enter valid URL</p>
         </form>
         <h1 id="result"></h1>
         <script>
