@@ -88,10 +88,10 @@ func handleNewUrl(context *gin.Context) {
 
 	collection := client.Database("url-schema").Collection("url")
 
-	a := UrlSchema{Hash: hash, Url: decodedUrl.Url}
+	data := UrlSchema{Hash: hash, Url: decodedUrl.Url}
 
 	if hash != "" {
-		_, error := collection.InsertOne(context, a)
+		_, error := collection.InsertOne(context, data)
 		err(error)
 	}
 
