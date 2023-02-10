@@ -2,9 +2,11 @@ package main
 
 import (
 	"crypto/rand"
-	"encoding/json"
+	"log"
 	"math/big"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -14,33 +16,26 @@ type Data struct {
 }
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./index.html")
+
+	router := gin.Default()
+
+	router.GET("/", func(context *gin.Context) {
+		context.File("./index.html")
 	})
 
-	http.HandleFunc("/url", handleNewUrl)
+	router.POST("/url", handleNewUrl)
 
-	http.ListenAndServe(":3000", nil)
+	log.Fatal(router.Run(":3000"))
 
 }
 
-func handleNewUrl(w http.ResponseWriter, r *http.Request) {
+func handleNewUrl(context *gin.Context) {
 
-	var decodedUrl *Data
-	if r.Method == "POST" {
-		ok := json.NewDecoder(r.Body).Decode(decodedUrl)
-		err(ok)
-	}
+	var decodedUrl Data
 
-	data := Data{
-		Url: generateUrl(10),
-	}
+	context.BindJSON(&decodedUrl)
 
-	marshal, ok := json.Marshal(data)
-
-	err(ok)
-
-	w.Write([]byte(marshal))
+	context.JSON(http.StatusOK, gin.H{"url": generateUrl(10)})
 }
 
 func generateUrl(n int) string {
