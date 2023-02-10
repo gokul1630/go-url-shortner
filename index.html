@@ -29,7 +29,7 @@
             <div id="copy-paste-section" class="relative max-w-lg bg-gray-400 mt-10 px-3 py-10 rounded-lg w-full">
                 <h1 class="text-white text-3xl text-center break-words" id="result"></h1>
                 <button
-                    onclick="copyText(this)"
+                    onclick="copyText()"
                     id="copy-btn"
                     class="absolute right-0 top-0 bg-gray-300 rounded-lg px-1 text-gray-800 hover:bg-gray-200">
                     copy!
@@ -54,18 +54,19 @@
             const input = document.getElementById("urlInput")
             const result = document.getElementById("result")
             const error = document.getElementById("error")
+            const copyBtn = document.getElementById("copy-btn")
             const copySection = document.getElementById("copy-paste-section")
 
-            function copyText(event) {
+            function copyText() {
                 if (result.innerText)
                     navigator.clipboard
                         .writeText(result.innerText)
                         .then(() => {
-                            event.innerText = "copied!"
+                            copyBtn.innerText = "copied!"
                             result
                         })
                         .catch(() => {
-                            event.innerText = "copy!"
+                            copyBtn.innerText = "copy!"
                         })
             }
 
@@ -88,6 +89,7 @@
                     const data = await response.json()
                     if (response.ok && data.url) {
                         input.value = ""
+                        copyBtn.innerText = "copy!"
                         result.innerText = `${window.location.origin}/${data.url}`
                     }
                 } else {
