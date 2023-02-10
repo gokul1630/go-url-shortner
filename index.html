@@ -11,9 +11,11 @@
             <input id="urlInput" type="text" />
             <button>Submit</button>
         </form>
+        <h1 id="result"></h1>
         <script>
             const form = document.getElementById("form")
             const input = document.getElementById("urlInput")
+            const result = document.getElementById("result")
 
             form.addEventListener("submit", async function (event) {
                 event.preventDefault()
@@ -29,8 +31,9 @@
                         body: JSON.stringify({ url: inputValue }),
                     })
                     const data = await response.json()
-                    if (response.ok) {
-                        console.log(data)
+                    if (response.ok && data.url) {
+                        input.value = ""
+                        result.innerText = `${window.location.origin}/${data.url}`
                     }
                 }
             })
