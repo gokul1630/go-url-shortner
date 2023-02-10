@@ -28,7 +28,8 @@ func handleNewUrl(w http.ResponseWriter, r *http.Request) {
 
 	var decodedUrl *Data
 	if r.Method == "POST" {
-		json.NewDecoder(r.Body).Decode(decodedUrl)
+		ok := json.NewDecoder(r.Body).Decode(decodedUrl)
+		err(ok)
 	}
 
 	data := Data{
@@ -37,9 +38,7 @@ func handleNewUrl(w http.ResponseWriter, r *http.Request) {
 
 	marshal, ok := json.Marshal(data)
 
-	if ok != nil {
-		panic(ok)
-	}
+	err(ok)
 
 	w.Write([]byte(marshal))
 }
@@ -51,13 +50,17 @@ func generateUrl(n int) string {
 	for i := range generatedString {
 		randomInt, ok := rand.Int(rand.Reader, big.NewInt(int64(len(letters))))
 
-		if ok != nil {
-			panic(ok)
-		}
+		err(ok)
 
 		generatedString[i] = letters[randomInt.Int64()]
 
 	}
 
 	return string(generatedString)
+}
+
+func err(ok any) {
+	if ok != nil {
+		panic(ok)
+	}
 }
