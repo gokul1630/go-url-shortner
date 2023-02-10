@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"crypto/rand"
+	"fmt"
 	"log"
 	"math/big"
 	"net/http"
@@ -24,6 +25,8 @@ func main() {
 
 	MONGOURI := os.Getenv("MONGO_URI")
 
+	PORT := os.Getenv("PORT")
+
 	client, error := mongo.Connect(context.TODO(), options.Client().ApplyURI(MONGOURI))
 
 	err(error)
@@ -40,7 +43,7 @@ func main() {
 
 	router.POST("/url", handleNewUrl)
 
-	log.Fatal(router.Run(":3000"))
+	log.Fatal(router.Run(fmt.Sprint(":", PORT)))
 
 	defer func() {
 		error := client.Disconnect(context.TODO())
