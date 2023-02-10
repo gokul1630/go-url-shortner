@@ -10,7 +10,6 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -51,6 +50,22 @@ func main() {
 		context.File("./index.html")
 	})
 
+	router.GET("/:url", func(context *gin.Context) {
+
+		paramHash := context.Param("url")
+
+		collection := client.Database("url-schema").Collection("url")
+
+		findHash := bson.D{primitive.E{Key: "hash", Value: paramHash}}
+
+		var result UrlSchema
+
+		collection.FindOne(context, findHash).Decode(&result)
+
+		context.Redirect(http.StatusPermanentRedirect, result.Url)
+
+	})
+
 	router.POST("/url", handleNewUrl)
 
 	log.Fatal(router.Run(fmt.Sprint(":", PORT)))
@@ -58,7 +73,6 @@ func main() {
 	defer func() {
 		error := client.Disconnect(context.TODO())
 		err(error)
-
 	}()
 }
 
