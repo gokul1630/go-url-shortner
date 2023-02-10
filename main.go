@@ -37,6 +37,8 @@ func main() {
 
 	router := gin.Default()
 
+	router.Use(DbMiddleWare(client))
+
 	router.GET("/", func(context *gin.Context) {
 		context.File("./index.html")
 	})
@@ -80,5 +82,12 @@ func generateUrl(n int) string {
 func err(ok any) {
 	if ok != nil {
 		panic(ok)
+	}
+}
+
+func DbMiddleWare(client *mongo.Client) gin.HandlerFunc {
+	return func(context *gin.Context) {
+		context.Set("database", client)
+		context.Next()
 	}
 }
