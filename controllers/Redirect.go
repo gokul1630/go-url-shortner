@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gokul1630/go-url-shortner/services"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -21,7 +22,7 @@ func Redirect(context *gin.Context) {
 
 	var result UrlSchema
 
-	collection.FindOne(context, findHash).Decode(&result)
+	services.FindOneFromDB(context, collection, findHash).Decode(&result)
 
 	context.Redirect(http.StatusPermanentRedirect, result.Url)
 

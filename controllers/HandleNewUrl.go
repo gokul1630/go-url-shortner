@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gokul1630/go-url-shortner/services"
 	"github.com/gokul1630/go-url-shortner/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -35,12 +36,12 @@ func HandleNewUrl(context *gin.Context) {
 
 	var result UrlSchema
 
-	collection.FindOne(context, findHash).Decode(&result)
+	services.FindOneFromDB(context, collection, findHash).Decode(&result)
 
 	data := UrlSchema{Hash: hash, Url: decodedUrl.Url}
 
 	if hash != "" && result.Url != data.Url {
-		_, ok := collection.InsertOne(context, data)
+		_, ok := services.InsertIntoDB(context, collection, data)
 
 		if ok != nil {
 			panic(ok)
