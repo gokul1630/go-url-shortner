@@ -10,6 +10,7 @@ import (
 	"github.com/gokul1630/go-url-shortner/database"
 	"github.com/gokul1630/go-url-shortner/middlewares"
 	"github.com/gokul1630/go-url-shortner/routes"
+	// "github.com/joho/godotenv"
 )
 
 type Data struct {
@@ -23,20 +24,24 @@ type UrlSchema struct {
 
 func main() {
 
+	// godotenv.Load()
+
 	PORT := os.Getenv("PORT")
 
 	router := gin.Default()
 
-	client := database.MongoDB()
+	mongoClient := database.MongoDB()
 
-	router.Use(middlewares.DBMiddleWare(client))
+	redisClient := database.Redis()
+
+	router.Use(middlewares.DBMiddleWare(mongoClient, redisClient))
 
 	routes.Routes(router)
 
 	log.Fatal(router.Run(fmt.Sprint(":", PORT)))
 
 	defer func() {
-		ok := client.Disconnect(context.TODO())
+		ok := mongoClient.Disconnect(context.TODO())
 		if ok != nil {
 			panic(ok)
 		}
