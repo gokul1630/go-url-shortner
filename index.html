@@ -31,7 +31,7 @@
                 <button
                     onclick="copyText()"
                     id="copy-btn"
-                    class="absolute right-0 top-0 bg-gray-300 rounded-lg px-1 text-gray-800 hover:bg-gray-200">
+                    class="absolute right-1 top-1 bg-gray-300 rounded-lg px-1 text-gray-800 hover:bg-gray-200">
                     copy!
                 </button>
             </div>
@@ -76,10 +76,12 @@
                 const inputValue = input.value
 
                 if (inputValue && isValidUrl(inputValue) && typeof window !== "undefined") {
+                    const { origin } = window.location
+
                     error.hidden = true
                     input.className += " border-0"
 
-                    const response = await fetch(`${window.location.origin}/api/v1/url`, {
+                    const response = await fetch(`${origin}/api/v1/url`, {
                         method: "POST",
                         headers: {
                             "Content-type": "application/json",
@@ -90,7 +92,7 @@
                     if (response.ok && data.url) {
                         input.value = ""
                         copyBtn.innerText = "copy!"
-                        result.innerText = `${window.location.origin}/${data.url}`
+                        result.innerText = `${origin}/${data.url}`
                     }
                 } else {
                     error.hidden = false
