@@ -2,8 +2,7 @@
 
 ## checkout the deployed site
 
-<a href='
-https://go-shortner.up.railway.app' target='_blank' rel='noreferrer'><img src="https://img.icons8.com/plasticine/100/ffffff/domain.png"/></a>
+<a href='https://go-shortner.up.railway.app' target='_blank' rel='noreferrer'><img src="https://img.icons8.com/plasticine/100/ffffff/domain.png"/></a>
 
 # Libraries Used
 
